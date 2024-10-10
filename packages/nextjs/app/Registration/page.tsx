@@ -9,7 +9,6 @@ import { Textarea } from "../../~/components/ui/textarea";
 
 const GoldRegistration = () => {
   const [formData, setFormData] = useState({
-    uniqueId: "",
     weight: "",
     purity: "",
     description: "",
@@ -38,25 +37,11 @@ const GoldRegistration = () => {
       <Card className="w-full max-w-2xl">
         <CardHeader className="space-y-2">
           <CardTitle className="text-2xl sm:text-3xl font-bold text-center text-white">Gold Registration</CardTitle>
-          <CardDescription className="text-center text-white">
-            Register your gold with unique identifiers and details
-          </CardDescription>
+          <CardDescription className="text-center text-white">Register your gold with details</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid gap-4 sm:grid-cols-2">
-              <div className="space-y-2">
-                <Label htmlFor="uniqueId" className="text-white">
-                  Unique Identifier
-                </Label>
-                <Input
-                  id="uniqueId"
-                  name="uniqueId"
-                  value={formData.uniqueId}
-                  onChange={handleChange}
-                  className="text-white"
-                />
-              </div>
               <div className="space-y-2">
                 <Label htmlFor="weight" className="text-white">
                   Weight (in grams or ounces)
@@ -66,7 +51,7 @@ const GoldRegistration = () => {
                   name="weight"
                   value={formData.weight}
                   onChange={handleChange}
-                  className="text-white"
+                  className="text-white w-full"
                 />
               </div>
               <div className="space-y-2">
@@ -79,7 +64,7 @@ const GoldRegistration = () => {
                   value={formData.purity}
                   onChange={handleChange}
                   placeholder="e.g., 24K, 22K, 18K"
-                  className="text-white"
+                  className="text-white w-full"
                 />
               </div>
               <div className="space-y-2">
@@ -91,7 +76,7 @@ const GoldRegistration = () => {
                   name="certificationDetails"
                   value={formData.certificationDetails}
                   onChange={handleChange}
-                  className="text-white"
+                  className="text-white w-full"
                 />
               </div>
               <div className="space-y-2">
@@ -104,7 +89,7 @@ const GoldRegistration = () => {
                   type="date"
                   value={formData.certificationDate}
                   onChange={handleChange}
-                  className="text-white"
+                  className="text-white w-full"
                 />
               </div>
               <div className="space-y-2">
@@ -116,7 +101,19 @@ const GoldRegistration = () => {
                   name="mineLocation"
                   value={formData.mineLocation}
                   onChange={handleChange}
-                  className="text-white"
+                  className="text-white w-full"
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="parentGoldId" className="text-white">
+                  Parent Gold ID (Optional)
+                </Label>
+                <Input
+                  id="parentGoldId"
+                  name="parentGoldId"
+                  value={formData.parentGoldId}
+                  onChange={handleChange}
+                  className="text-white w-full"
                 />
               </div>
             </div>
@@ -129,19 +126,7 @@ const GoldRegistration = () => {
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                className="text-white"
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="parentGoldId" className="text-white">
-                Parent Gold ID (Optional)
-              </Label>
-              <Input
-                id="parentGoldId"
-                name="parentGoldId"
-                value={formData.parentGoldId}
-                onChange={handleChange}
-                className="text-white"
+                className="text-white w-full"
               />
             </div>
           </form>
