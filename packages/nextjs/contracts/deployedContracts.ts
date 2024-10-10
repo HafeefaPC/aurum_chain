@@ -6,6 +6,208 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
   31337: {
+    GoldLedger: {
+      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      abi: [
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "uniqueIdentifier",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "registrar",
+              type: "address",
+            },
+          ],
+          name: "GoldRegistered",
+          type: "event",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "_uniqueIdentifier",
+              type: "uint256",
+            },
+          ],
+          name: "getGoldDetails",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "string",
+                  name: "weight",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "purity",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "description",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "certificationDetails",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "certificationDate",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "mineLocation",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "parentGoldId",
+                  type: "string",
+                },
+                {
+                  internalType: "uint256",
+                  name: "uniqueIdentifier",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct GoldLedger.GoldDetails",
+              name: "",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "goldRegistry",
+          outputs: [
+            {
+              internalType: "string",
+              name: "weight",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "purity",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "description",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "certificationDetails",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "certificationDate",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "mineLocation",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "parentGoldId",
+              type: "string",
+            },
+            {
+              internalType: "uint256",
+              name: "uniqueIdentifier",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "string",
+              name: "_weight",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_purity",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_description",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_certificationDetails",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_certificationDate",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_mineLocation",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_parentGoldId",
+              type: "string",
+            },
+          ],
+          name: "registerGold",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "totalRegistrations",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {},
+    },
     YourContract: {
       address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       abi: [

@@ -1,87 +1,59 @@
-//SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-// Useful for debugging. Remove when deploying to a live network.
 import "hardhat/console.sol";
 
-// Use openzeppelin to inherit battle-tested implementations (ERC20, ERC721, etc)
-// import "@openzeppelin/contracts/access/Ownable.sol";
+contract GoldLedger {
+    struct GoldDetails {
+        string weight;
+        string purity;
+        string description;
+        string certificationDetails;
+        string certificationDate;
+        string mineLocation;
+        string parentGoldId;
+        uint256 uniqueIdentifier;
+    }
 
-/**
- * A smart contract that allows changing a state variable of the contract and tracking the changes
- * It also allows the owner to withdraw the Ether in the contract
- * @author BuidlGuidl
- */
-contract YourContract {
-	// State Variables
-	address public immutable owner;
-	string public greeting = "Building Unstoppable Apps!!!";
-	bool public premium = false;
-	uint256 public totalCounter = 0;
-	mapping(address => uint) public userGreetingCounter;
+    mapping(uint256 => GoldDetails) public goldRegistry;
+    uint256 public totalRegistrations;
 
-	// Events: a way to emit log statements from smart contract that can be listened to by external parties
-	event GreetingChange(
-		address indexed greetingSetter,
-		string newGreeting,
-		bool premium,
-		uint256 value
-	);
+    event GoldRegistered(uint256 indexed uniqueIdentifier, address indexed registrar);
 
-	// Constructor: Called once on contract deployment
-	// Check packages/hardhat/deploy/00_deploy_your_contract.ts
-	constructor(address _owner) {
-		owner = _owner;
-	}
+    function registerGold(
+        string memory _weight,
+        string memory _purity,
+        string memory _description,
+        string memory _certificationDetails,
+        string memory _certificationDate,
+        string memory _mineLocation,
+        string memory _parentGoldId
+    ) public returns (uint256) {
+        totalRegistrations++;
+        uint256 uniqueIdentifier = generateUniqueIdentifier();
 
-	// Modifier: used to define a set of rules that must be met before or after a function is executed
-	// Check the withdraw() function
-	modifier isOwner() {
-		// msg.sender: predefined variable that represents address of the account that called the current function
-		require(msg.sender == owner, "Not the Owner");
-		_;
-	}
+        goldRegistry[uniqueIdentifier] = GoldDetails({
+            weight: _weight,
+            purity: _purity,
+            description: _description,
+            certificationDetails: _certificationDetails,
+            certificationDate: _certificationDate,
+            mineLocation: _mineLocation,
+            parentGoldId: _parentGoldId,
+            uniqueIdentifier: uniqueIdentifier
+        });
 
-	/**
-	 * Function that allows anyone to change the state variable "greeting" of the contract and increase the counters
-	 *
-	 * @param _newGreeting (string memory) - new greeting to save on the contract
-	 */
-	function setGreeting(string memory _newGreeting) public payable {
-		// Print data to the hardhat chain console. Remove when deploying to a live network.
-		console.log(
-			"Setting new greeting '%s' from %s",
-			_newGreeting,
-			msg.sender
-		);
+        emit GoldRegistered(uniqueIdentifier, msg.sender);
 
-		// Change state variables
-		greeting = _newGreeting;
-		totalCounter += 1;
-		userGreetingCounter[msg.sender] += 1;
+        return uniqueIdentifier;
+    }
 
-		// msg.value: built-in global variable that represents the amount of ether sent with the transaction
-		if (msg.value > 0) {
-			premium = true;
-		} else {
-			premium = false;
-		}
+    function getGoldDetails(uint256 _uniqueIdentifier) public view returns (GoldDetails memory) {
+        require(goldRegistry[_uniqueIdentifier].uniqueIdentifier != 0, "Gold not found");
+        return goldRegistry[_uniqueIdentifier];
+    }
 
-		// emit: keyword used to trigger an event
-		emit GreetingChange(msg.sender, _newGreeting, msg.value > 0, msg.value);
-	}
-
-	/**
-	 * Function that allows the owner to withdraw all the Ether in the contract
-	 * The function can only be called by the owner of the contract as defined by the isOwner modifier
-	 */
-	function withdraw() public isOwner {
-		(bool success, ) = owner.call{ value: address(this).balance }("");
-		require(success, "Failed to send Ether");
-	}
-
-	/**
-	 * Function that allows the contract to receive ETH
-	 */
-	receive() external payable {}
+    function generateUniqueIdentifier() private view returns (uint256) {
+        return uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender, totalRegistrations))) % 1000000000000;
+    }
 }
