@@ -7,16 +7,16 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     GoldLedger: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
       abi: [
         {
           anonymous: false,
           inputs: [
             {
               indexed: true,
-              internalType: "uint256",
+              internalType: "bytes32",
               name: "uniqueIdentifier",
-              type: "uint256",
+              type: "bytes32",
             },
             {
               indexed: true,
@@ -31,9 +31,9 @@ const deployedContracts = {
         {
           inputs: [
             {
-              internalType: "uint256",
+              internalType: "bytes32",
               name: "_uniqueIdentifier",
-              type: "uint256",
+              type: "bytes32",
             },
           ],
           name: "getGoldDetails",
@@ -76,9 +76,9 @@ const deployedContracts = {
                   type: "string",
                 },
                 {
-                  internalType: "uint256",
+                  internalType: "bytes32",
                   name: "uniqueIdentifier",
-                  type: "uint256",
+                  type: "bytes32",
                 },
               ],
               internalType: "struct GoldLedger.GoldDetails",
@@ -92,9 +92,70 @@ const deployedContracts = {
         {
           inputs: [
             {
-              internalType: "uint256",
+              internalType: "bytes32",
+              name: "_transactionHash",
+              type: "bytes32",
+            },
+          ],
+          name: "getGoldDetailsByTransactionHash",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "string",
+                  name: "weight",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "purity",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "description",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "certificationDetails",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "certificationDate",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "mineLocation",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "parentGoldId",
+                  type: "string",
+                },
+                {
+                  internalType: "bytes32",
+                  name: "uniqueIdentifier",
+                  type: "bytes32",
+                },
+              ],
+              internalType: "struct GoldLedger.GoldDetails",
               name: "",
-              type: "uint256",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes32",
+              name: "",
+              type: "bytes32",
             },
           ],
           name: "goldRegistry",
@@ -135,9 +196,9 @@ const deployedContracts = {
               type: "string",
             },
             {
-              internalType: "uint256",
+              internalType: "bytes32",
               name: "uniqueIdentifier",
-              type: "uint256",
+              type: "bytes32",
             },
           ],
           stateMutability: "view",
@@ -184,9 +245,9 @@ const deployedContracts = {
           name: "registerGold",
           outputs: [
             {
-              internalType: "uint256",
+              internalType: "bytes32",
               name: "",
-              type: "uint256",
+              type: "bytes32",
             },
           ],
           stateMutability: "nonpayable",

@@ -12,13 +12,13 @@ contract GoldLedger {
         string certificationDate;
         string mineLocation;
         string parentGoldId;
-        uint256 uniqueIdentifier;
+        bytes32 uniqueIdentifier;
     }
 
-    mapping(uint256 => GoldDetails) public goldRegistry;
+    mapping(bytes32 => GoldDetails) public goldRegistry;
     uint256 public totalRegistrations;
 
-    event GoldRegistered(uint256 indexed uniqueIdentifier, address indexed registrar);
+    event GoldRegistered(bytes32 indexed uniqueIdentifier, address indexed registrar);
 
     function registerGold(
         string memory _weight,
@@ -28,9 +28,9 @@ contract GoldLedger {
         string memory _certificationDate,
         string memory _mineLocation,
         string memory _parentGoldId
-    ) public returns (uint256) {
+    ) public returns (bytes32) {
         totalRegistrations++;
-        uint256 uniqueIdentifier = generateUniqueIdentifier();
+        bytes32 uniqueIdentifier = bytes32(keccak256(abi.encodePacked(block.timestamp, msg.sender, totalRegistrations)));
 
         goldRegistry[uniqueIdentifier] = GoldDetails({
             weight: _weight,
@@ -48,12 +48,13 @@ contract GoldLedger {
         return uniqueIdentifier;
     }
 
-    function getGoldDetails(uint256 _uniqueIdentifier) public view returns (GoldDetails memory) {
-        require(goldRegistry[_uniqueIdentifier].uniqueIdentifier != 0, "Gold not found");
+    function getGoldDetails(bytes32 _uniqueIdentifier) public view returns (GoldDetails memory) {
+        require(goldRegistry[_uniqueIdentifier].uniqueIdentifier != bytes32(0), "Gold not found");
         return goldRegistry[_uniqueIdentifier];
     }
 
-    function generateUniqueIdentifier() private view returns (uint256) {
-        return uint256(keccak256(abi.encodePacked(block.timestamp, msg.sender, totalRegistrations))) % 1000000000000;
+    function getGoldDetailsByTransactionHash(bytes32 _transactionHash) public view returns (GoldDetails memory) {
+        require(goldRegistry[_transactionHash].uniqueIdentifier != bytes32(0), "Gold not found");
+        return goldRegistry[_transactionHash];
     }
 }

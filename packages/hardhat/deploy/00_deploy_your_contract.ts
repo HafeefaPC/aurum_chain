@@ -35,6 +35,18 @@ const deployGoldLedger: DeployFunction = async function (hre: HardhatRuntimeEnvi
   const goldLedger = await hre.ethers.getContract<Contract>("GoldLedger", deployer);
   console.log("👋 GoldLedger deployed at:", goldLedger.address);
   console.log("📊 Total registrations:", await goldLedger.totalRegistrations());
+
+  // Register some initial gold entries for testing
+  await goldLedger.registerGold("100g", "24K", "Gold bar", "Cert123", "2023-06-01", "Mine A", "0");
+  await goldLedger.registerGold("50g", "22K", "Gold coin", "Cert456", "2023-06-02", "Mine B", "0");
+
+  console.log("🏆 Initial gold entries registered");
+  console.log("📊 Updated total registrations:", await goldLedger.totalRegistrations());
+
+  // Retrieve and log details of the first registered gold entry
+  const firstGoldId = await goldLedger.registerGold("100g", "24K", "Gold bar", "Cert123", "2023-06-01", "Mine A", "0");
+  const firstGoldDetails = await goldLedger.getGoldDetails(firstGoldId);
+  console.log("🔍 Details of first gold entry:", firstGoldDetails);
 };
 
 export default deployGoldLedger;
