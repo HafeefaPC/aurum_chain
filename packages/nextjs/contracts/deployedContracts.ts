@@ -7,7 +7,7 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     GoldLedger: {
-      address: "0x9fE46736679d2D9a65F0992F2272dE9f3c7fa6e0",
+      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
       abi: [
         {
           anonymous: false,
@@ -208,85 +208,86 @@ const deployedContracts = {
       ],
       inheritedFunctions: {},
     },
-    YourContract: {
-      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+  },
+  84532: {
+    GoldLedger: {
+      address: "0xc2591EcC12DB13eef1191459A00e14f6f9850345",
       abi: [
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "_owner",
-              type: "address",
-            },
-          ],
-          stateMutability: "nonpayable",
-          type: "constructor",
-        },
         {
           anonymous: false,
           inputs: [
             {
               indexed: true,
-              internalType: "address",
-              name: "greetingSetter",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "string",
-              name: "newGreeting",
-              type: "string",
-            },
-            {
-              indexed: false,
-              internalType: "bool",
-              name: "premium",
-              type: "bool",
-            },
-            {
-              indexed: false,
               internalType: "uint256",
-              name: "value",
+              name: "uniqueIdentifier",
               type: "uint256",
             },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "registrar",
+              type: "address",
+            },
           ],
-          name: "GreetingChange",
+          name: "GoldRegistered",
           type: "event",
         },
         {
-          inputs: [],
-          name: "greeting",
-          outputs: [
+          inputs: [
             {
-              internalType: "string",
-              name: "",
-              type: "string",
+              internalType: "uint256",
+              name: "_uniqueIdentifier",
+              type: "uint256",
             },
           ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "owner",
+          name: "getGoldDetails",
           outputs: [
             {
-              internalType: "address",
+              components: [
+                {
+                  internalType: "string",
+                  name: "weight",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "purity",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "description",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "certificationDetails",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "certificationDate",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "mineLocation",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "parentGoldId",
+                  type: "string",
+                },
+                {
+                  internalType: "uint256",
+                  name: "uniqueIdentifier",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct GoldLedger.GoldDetails",
               name: "",
-              type: "address",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "premium",
-          outputs: [
-            {
-              internalType: "bool",
-              name: "",
-              type: "bool",
+              type: "tuple",
             },
           ],
           stateMutability: "view",
@@ -295,23 +296,51 @@ const deployedContracts = {
         {
           inputs: [
             {
-              internalType: "string",
-              name: "_newGreeting",
-              type: "string",
-            },
-          ],
-          name: "setGreeting",
-          outputs: [],
-          stateMutability: "payable",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "totalCounter",
-          outputs: [
-            {
               internalType: "uint256",
               name: "",
+              type: "uint256",
+            },
+          ],
+          name: "goldRegistry",
+          outputs: [
+            {
+              internalType: "string",
+              name: "weight",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "purity",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "description",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "certificationDetails",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "certificationDate",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "mineLocation",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "parentGoldId",
+              type: "string",
+            },
+            {
+              internalType: "uint256",
+              name: "uniqueIdentifier",
               type: "uint256",
             },
           ],
@@ -321,12 +350,42 @@ const deployedContracts = {
         {
           inputs: [
             {
-              internalType: "address",
-              name: "",
-              type: "address",
+              internalType: "string",
+              name: "_weight",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_purity",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_description",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_certificationDetails",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_certificationDate",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_mineLocation",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_parentGoldId",
+              type: "string",
             },
           ],
-          name: "userGreetingCounter",
+          name: "registerGold",
           outputs: [
             {
               internalType: "uint256",
@@ -334,19 +393,21 @@ const deployedContracts = {
               type: "uint256",
             },
           ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "withdraw",
-          outputs: [],
           stateMutability: "nonpayable",
           type: "function",
         },
         {
-          stateMutability: "payable",
-          type: "receive",
+          inputs: [],
+          name: "totalRegistrations",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
         },
       ],
       inheritedFunctions: {},

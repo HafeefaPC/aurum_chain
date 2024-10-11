@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Input } from "../../~/components/ui/input";
 import { Label } from "../../~/components/ui/label";
 import { Textarea } from "../../~/components/ui/textarea";
+import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 const GoldRegistration = () => {
   const [formData, setFormData] = useState({
@@ -18,6 +19,8 @@ const GoldRegistration = () => {
     parentGoldId: "",
   });
 
+  const { writeContractAsync: writeGoldLedgerAsync } = useScaffoldWriteContract("GoldLedger");
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prevState => ({
@@ -26,10 +29,28 @@ const GoldRegistration = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log(formData);
+    try {
+      const result = await writeGoldLedgerAsync({
+        functionName: "registerGold",
+        args: [
+          formData.weight,
+          formData.purity,
+          formData.description,
+          formData.certificationDetails,
+          formData.certificationDate,
+          formData.mineLocation,
+          formData.parentGoldId,
+        ],
+      });
+      console.log("Gold registered successfully");
+      console.log("Unique Identifier:", result);
+      // Reset form or show success message
+    } catch (error) {
+      console.error("Error registering gold:", error);
+      // Show error message to user
+    }
   };
 
   return (
