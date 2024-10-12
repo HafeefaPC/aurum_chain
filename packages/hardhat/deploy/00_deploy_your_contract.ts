@@ -8,45 +8,49 @@ import { Contract } from "ethers";
  * @param hre HardhatRuntimeEnvironment object.
  */
 const deployGoldLedger: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
-  /*
-    On localhost, the deployer account is the one that comes with Hardhat, which is already funded.
-
-    When deploying to live networks (e.g `yarn deploy --network sepolia`), the deployer account
-    should have sufficient balance to pay for the gas fees for contract creation.
-
-    You can generate a random account with `yarn generate` which will fill DEPLOYER_PRIVATE_KEY
-    with a random private key in the .env file (then used on hardhat.config.ts)
-    You can run the `yarn account` command to check your balance in every network.
-  */
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
   await deploy("GoldLedger", {
     from: deployer,
-    // Contract constructor arguments
-    args: [],
+    args: [], // GoldLedger constructor doesn't have any arguments
     log: true,
-    // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by
-    // automatically mining the contract deployment transaction. There is no effect on live networks.
     autoMine: true,
   });
 
   // Get the deployed contract to interact with it after deploying.
   const goldLedger = await hre.ethers.getContract<Contract>("GoldLedger", deployer);
   console.log("👋 GoldLedger deployed at:", goldLedger.address);
-  console.log("📊 Total registrations:", await goldLedger.totalRegistrations());
+  console.log("📦 Initial total registrations:", await goldLedger.totalRegistrations());
 
-  // Register some initial gold entries for testing
-  await goldLedger.registerGold("100g", "24K", "Gold bar", "Cert123", "2023-06-01", "Mine A", "0");
-  await goldLedger.registerGold("50g", "22K", "Gold coin", "Cert456", "2023-06-02", "Mine B", "0");
+  try {
+    // Register initial gold entries
+    const tx1 = await goldLedger.registerGold("100", "24", "Gold bar", "Cert123", "2023-06-01", "Mine A", "0");
+    const receipt1 = await tx1.wait();
+    const event1 = receipt1.events?.find((event: { event: string; args: any }) => event.event === "GoldRegistered");
+    const uniqueIdentifier1 = event1?.args?.uniqueIdentifier;
 
-  console.log("🏆 Initial gold entries registered");
-  console.log("📊 Updated total registrations:", await goldLedger.totalRegistrations());
+    const tx2 = await goldLedger.registerGold("50", "22", "Gold coin", "Cert456", "2023-06-02", "Mine B", "0");
+    const receipt2 = await tx2.wait();
+    const event2 = receipt2.events?.find((event: { event: string; args: any }) => event.event === "GoldRegistered");
+    const uniqueIdentifier2 = event2?.args?.uniqueIdentifier;
 
-  // Retrieve and log details of the first registered gold entry
-  const firstGoldId = await goldLedger.registerGold("100g", "24K", "Gold bar", "Cert123", "2023-06-01", "Mine A", "0");
-  const firstGoldDetails = await goldLedger.getGoldDetails(firstGoldId);
-  console.log("🔍 Details of first gold entry:", firstGoldDetails);
+    console.log("🏆 Initial gold entries registered");
+    console.log("🚀 Updated total registrations:", await goldLedger.totalRegistrations());
+
+    // Retrieve and log details of the first registered gold entry
+    if (uniqueIdentifier1) {
+      const firstGoldDetails = await goldLedger.getGoldDetails(uniqueIdentifier1);
+      console.log("🔍 Details of first gold entry:", firstGoldDetails);
+    }
+
+    if (uniqueIdentifier2) {
+      const secondGoldDetails = await goldLedger.getGoldDetails(uniqueIdentifier2);
+      console.log("🔍 Details of second gold entry:", secondGoldDetails);
+    }
+  } catch (error) {
+    console.error("Error registering gold entries:", error);
+  }
 };
 
 export default deployGoldLedger;

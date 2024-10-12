@@ -55,7 +55,7 @@ const GoldRegistration = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 text-white">
-      <Card className="w-full max-w-2xl">
+      <Card className="w-full max-w-2xl p-4">
         <CardHeader className="space-y-2">
           <CardTitle className="text-2xl sm:text-3xl font-bold text-center text-white">Gold Registration</CardTitle>
           <CardDescription className="text-center text-white">Register your gold with details</CardDescription>
@@ -152,7 +152,7 @@ const GoldRegistration = () => {
             </div>
           </form>
         </CardContent>
-        <CardFooter>
+        <CardFooter className="mt-4 sm:mt-6 md:mt-8">
           <Button type="submit" onClick={handleSubmit} className="w-full text-black">
             Register Gold
           </Button>
