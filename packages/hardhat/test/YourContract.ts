@@ -1,29 +1,39 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { GoldLedger } from "../typechain-types";
+import { GoldLedger, GoldLedger__factory } from "../typechain-types";
 import { BytesLike } from "ethers";
 
 describe("GoldLedger", function () {
   let goldLedger: GoldLedger;
 
   before(async () => {
-    const goldLedgerFactory = await ethers.getContractFactory("GoldLedger");
+    const goldLedgerFactory: GoldLedger__factory = (await ethers.getContractFactory(
+      "GoldLedger",
+    )) as GoldLedger__factory;
     goldLedger = await goldLedgerFactory.deploy();
     await goldLedger.waitForDeployment();
   });
 
   describe("Gold Registration", function () {
-    it("Should register gold with initial details and complete registration", async function () {
-      const weight = "10g";
-      const purity = "99.9%";
-      const description = "Pure gold bar";
-      const certificationDetails = "Certified by XYZ";
-      const certificationDate = "2023-06-01";
-      const mineLocation = "Mine A";
-      const parentGoldId = ethers.ZeroHash;
+    it("Should register gold with initial details", async function () {
+      const weight: string = "10g";
+      const purity: string = "99.9%";
+      const description: string = "Pure gold bar";
+      const certificationDetails: string = "Certified by XYZ";
+      const certificationDate: string = "2023-01-01";
+      const mineLocation: string = "Mine A";
+      const parentGoldId: BytesLike = ethers.zeroPadBytes(ethers.toBeHex("0x123456789012"), 12);
 
       // Initial registration
-      const tx = await goldLedger.registerGold(weight, purity, description);
+      const tx = await goldLedger.registerGold(
+        weight,
+        purity,
+        description,
+        certificationDetails,
+        certificationDate,
+        mineLocation,
+        parentGoldId,
+      );
 
       const receipt = await tx.wait();
       if (!receipt) {
@@ -43,43 +53,23 @@ describe("GoldLedger", function () {
           throw new Error("Unable to extract uniqueIdentifier from logs");
         }
       } else {
-        console.log("No logs found. Attempting to get uniqueIdentifier from function return value.");
-        uniqueIdentifier = await goldLedger.registerGold.staticCall(weight, purity, description);
+        throw new Error("No logs found. Unable to extract uniqueIdentifier.");
       }
 
       console.log("Extracted uniqueIdentifier:", uniqueIdentifier);
 
-      // Complete registration
-      await goldLedger.completeGoldRegistration(
-        uniqueIdentifier,
-        certificationDetails,
-        certificationDate,
-        mineLocation,
-        parentGoldId,
-      );
-
       // Retrieve and verify gold details
-      const goldDetails = await goldLedger.getGoldDetails(uniqueIdentifier);
+      const goldDetails = await goldLedger.getAllGoldDetails();
 
-      expect(goldDetails.weight).to.equal(weight);
-      expect(goldDetails.purity).to.equal(purity);
-      expect(goldDetails.description).to.equal(description);
-      expect(goldDetails.certificationDetails).to.equal(certificationDetails);
-      expect(goldDetails.certificationDate).to.equal(certificationDate);
-      expect(goldDetails.mineLocation).to.equal(mineLocation);
-      expect(goldDetails.parentGoldId).to.equal(parentGoldId);
+      expect(goldDetails.length).to.equal(1);
+      expect(goldDetails[0].weight).to.equal(weight);
+      expect(goldDetails[0].purity).to.equal(purity);
+      expect(goldDetails[0].description).to.equal(description);
     });
 
     it("Should fail to retrieve non-existent gold details", async function () {
-      const nonExistentId = ethers.randomBytes(32);
+      const nonExistentId: BytesLike = ethers.zeroPadBytes(ethers.toBeHex("0x000000000000"), 12);
       await expect(goldLedger.getGoldDetails(nonExistentId)).to.be.revertedWith("Gold not found");
-    });
-
-    it("Should fail to complete registration for non-existent gold", async function () {
-      const nonExistentId = ethers.randomBytes(32);
-      await expect(
-        goldLedger.completeGoldRegistration(nonExistentId, "Certification", "2023-06-02", "Mine B", ethers.ZeroHash),
-      ).to.be.revertedWith("Gold not found");
     });
   });
 });

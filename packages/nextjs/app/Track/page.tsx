@@ -8,6 +8,7 @@ import { Label } from "../../~/components/ui/label";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 
 interface GoldDetails {
+  uniqueIdentifier: string;
   weight: string;
   purity: string;
   description: string;
@@ -15,21 +16,22 @@ interface GoldDetails {
   certificationDate: string;
   mineLocation: string;
   parentGoldId: string;
+  hasParentGoldId: boolean;
 }
 
 const GoldSearch = () => {
   const [searchId, setSearchId] = useState<string>("");
   const [searchPerformed, setSearchPerformed] = useState(false);
+  const [matchedGoldDetails, setMatchedGoldDetails] = useState<GoldDetails | null>(null);
 
   const {
-    data: goldDetails,
+    data: allGoldDetails,
     isLoading,
     error,
     refetch,
   } = useScaffoldReadContract({
     contractName: "GoldLedger",
-    functionName: "getGoldDetails",
-    args: [searchId as `0x${string}`],
+    functionName: "getAllGoldDetails",
   });
 
   useEffect(() => {
@@ -38,6 +40,16 @@ const GoldSearch = () => {
     }
   }, [searchPerformed, searchId, refetch]);
 
+  useEffect(() => {
+    if (allGoldDetails && searchId) {
+      console.log("Result from smart contract:", allGoldDetails);
+      const matchedDetails = (allGoldDetails as unknown as GoldDetails[]).find(
+        details => details.uniqueIdentifier === searchId,
+      );
+      setMatchedGoldDetails(matchedDetails || null);
+    }
+  }, [allGoldDetails, searchId]);
+
   const handleSearch = () => {
     if (searchId) {
       setSearchPerformed(true);
@@ -45,36 +57,47 @@ const GoldSearch = () => {
   };
 
   const renderGoldDetails = (details: GoldDetails) => (
-    <div className="grid grid-cols-2 gap-4">
-      <div>
-        <Label className="font-bold">Weight:</Label>
-        <p>{details.weight}</p>
-      </div>
-      <div>
-        <Label className="font-bold">Purity:</Label>
-        <p>{details.purity}</p>
-      </div>
-      <div>
-        <Label className="font-bold">Description:</Label>
-        <p>{details.description}</p>
-      </div>
-      <div>
-        <Label className="font-bold">Certification Details:</Label>
-        <p>{details.certificationDetails}</p>
-      </div>
-      <div>
-        <Label className="font-bold">Certification Date:</Label>
-        <p>{details.certificationDate}</p>
-      </div>
-      <div>
-        <Label className="font-bold">Mine Location:</Label>
-        <p>{details.mineLocation}</p>
-      </div>
-      <div>
-        <Label className="font-bold">Parent Gold ID:</Label>
-        <p>{details.parentGoldId}</p>
-      </div>
-    </div>
+    <Card className="p-4">
+      <CardHeader>
+        <CardTitle className="text-lg font-semibold">Gold Details</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="grid grid-cols-2 gap-4">
+          <div>
+            <Label className="font-bold">Weight:</Label>
+            <p>{details.weight}</p>
+          </div>
+          <div>
+            <Label className="font-bold">Purity:</Label>
+            <p>{details.purity}</p>
+          </div>
+          <div>
+            <Label className="font-bold">Description:</Label>
+            <p>{details.description}</p>
+          </div>
+          <div>
+            <Label className="font-bold">Certification Details:</Label>
+            <p>{details.certificationDetails}</p>
+          </div>
+          <div>
+            <Label className="font-bold">Certification Date:</Label>
+            <p>{details.certificationDate}</p>
+          </div>
+          <div>
+            <Label className="font-bold">Mine Location:</Label>
+            <p>{details.mineLocation}</p>
+          </div>
+          <div>
+            <Label className="font-bold">Parent Gold ID:</Label>
+            <p>{details.parentGoldId}</p>
+          </div>
+          <div>
+            <Label className="font-bold">Unique Identifier:</Label>
+            <p>{details.uniqueIdentifier}</p>
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 
   return (
@@ -100,15 +123,10 @@ const GoldSearch = () => {
           </div>
           {isLoading && <p className="mt-4">Loading...</p>}
           {error && <p className="mt-4 text-red-500">Error: {error.message}</p>}
-          {searchPerformed && !isLoading && !error && !goldDetails && (
+          {searchPerformed && !isLoading && !error && !matchedGoldDetails && (
             <p className="mt-4">No gold details found for the given identifier.</p>
           )}
-          {goldDetails && (
-            <div className="mt-4">
-              <h3 className="text-lg font-semibold mb-2">Gold Details:</h3>
-              {renderGoldDetails(goldDetails as unknown as GoldDetails)}
-            </div>
-          )}
+          {matchedGoldDetails && <div className="mt-4">{renderGoldDetails(matchedGoldDetails)}</div>}
         </CardContent>
       </Card>
     </div>

@@ -8,11 +8,25 @@ import { Label } from "../../~/components/ui/label";
 import { Textarea } from "../../~/components/ui/textarea";
 import { useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
+interface FormData {
+  weight: string;
+  purity: string;
+  description: string;
+  certificationDetails: string;
+  certificationDate: string;
+  mineLocation: string;
+  parentGoldId?: string; // Make parentGoldId optional
+}
+
 const GoldRegistration = () => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormData>({
     weight: "",
     purity: "",
     description: "",
+    certificationDetails: "",
+    certificationDate: "",
+    mineLocation: "",
+    parentGoldId: "",
   });
 
   const { writeContractAsync: writeGoldLedgerAsync } = useScaffoldWriteContract("GoldLedger");
@@ -28,9 +42,19 @@ const GoldRegistration = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const args = [
+        formData.weight,
+        formData.purity,
+        formData.description,
+        formData.certificationDetails,
+        formData.certificationDate,
+        formData.mineLocation,
+        formData.parentGoldId ? (formData.parentGoldId as `0x${string}`) : "0x000000000000000000000000",
+      ] as const;
+
       const result = await writeGoldLedgerAsync({
         functionName: "registerGold",
-        args: [formData.weight, formData.purity, formData.description],
+        args,
       });
       console.log("Gold registered successfully");
       console.log("Unique Identifier:", result);
@@ -87,6 +111,56 @@ const GoldRegistration = () => {
                 value={formData.description}
                 onChange={handleChange}
                 className="text-white w-full"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="certificationDetails" className="text-white">
+                Certification Details
+              </Label>
+              <Input
+                id="certificationDetails"
+                name="certificationDetails"
+                value={formData.certificationDetails}
+                onChange={handleChange}
+                className="text-white w-full"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="certificationDate" className="text-white">
+                Certification Date
+              </Label>
+              <Input
+                id="certificationDate"
+                name="certificationDate"
+                type="date"
+                value={formData.certificationDate}
+                onChange={handleChange}
+                className="text-white w-full"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="mineLocation" className="text-white">
+                Mine Location
+              </Label>
+              <Input
+                id="mineLocation"
+                name="mineLocation"
+                value={formData.mineLocation}
+                onChange={handleChange}
+                className="text-white w-full"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="parentGoldId" className="text-white">
+                Parent Gold ID
+              </Label>
+              <Input
+                id="parentGoldId"
+                name="parentGoldId"
+                value={formData.parentGoldId}
+                onChange={handleChange}
+                className="text-white w-full"
+                placeholder="Leave blank if not applicable"
               />
             </div>
           </form>

@@ -7,16 +7,16 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 const deployedContracts = {
   31337: {
     GoldLedger: {
-      address: "0x2279B7A0a67DB372996a5FaB50D91eAA73d2eBe6",
+      address: "0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1",
       abi: [
         {
           anonymous: false,
           inputs: [
             {
               indexed: true,
-              internalType: "bytes32",
+              internalType: "bytes12",
               name: "uniqueIdentifier",
-              type: "bytes32",
+              type: "bytes12",
             },
             {
               indexed: true,
@@ -29,50 +29,16 @@ const deployedContracts = {
           type: "event",
         },
         {
-          inputs: [
-            {
-              internalType: "bytes32",
-              name: "_uniqueIdentifier",
-              type: "bytes32",
-            },
-            {
-              internalType: "string",
-              name: "_certificationDetails",
-              type: "string",
-            },
-            {
-              internalType: "string",
-              name: "_certificationDate",
-              type: "string",
-            },
-            {
-              internalType: "string",
-              name: "_mineLocation",
-              type: "string",
-            },
-            {
-              internalType: "bytes32",
-              name: "_parentGoldId",
-              type: "bytes32",
-            },
-          ],
-          name: "completeGoldRegistration",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "bytes32",
-              name: "_uniqueIdentifier",
-              type: "bytes32",
-            },
-          ],
-          name: "getGoldDetails",
+          inputs: [],
+          name: "getAllGoldDetails",
           outputs: [
             {
               components: [
+                {
+                  internalType: "bytes12",
+                  name: "uniqueIdentifier",
+                  type: "bytes12",
+                },
                 {
                   internalType: "string",
                   name: "weight",
@@ -104,9 +70,80 @@ const deployedContracts = {
                   type: "string",
                 },
                 {
-                  internalType: "bytes32",
+                  internalType: "bytes12",
                   name: "parentGoldId",
-                  type: "bytes32",
+                  type: "bytes12",
+                },
+                {
+                  internalType: "bool",
+                  name: "hasParentGoldId",
+                  type: "bool",
+                },
+              ],
+              internalType: "struct GoldLedger.GoldDetails[]",
+              name: "",
+              type: "tuple[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes12",
+              name: "_uniqueIdentifier",
+              type: "bytes12",
+            },
+          ],
+          name: "getGoldDetails",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "bytes12",
+                  name: "uniqueIdentifier",
+                  type: "bytes12",
+                },
+                {
+                  internalType: "string",
+                  name: "weight",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "purity",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "description",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "certificationDetails",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "certificationDate",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "mineLocation",
+                  type: "string",
+                },
+                {
+                  internalType: "bytes12",
+                  name: "parentGoldId",
+                  type: "bytes12",
+                },
+                {
+                  internalType: "bool",
+                  name: "hasParentGoldId",
+                  type: "bool",
                 },
               ],
               internalType: "struct GoldLedger.GoldDetails",
@@ -134,13 +171,33 @@ const deployedContracts = {
               name: "_description",
               type: "string",
             },
+            {
+              internalType: "string",
+              name: "_certificationDetails",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_certificationDate",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_mineLocation",
+              type: "string",
+            },
+            {
+              internalType: "bytes12",
+              name: "_parentGoldId",
+              type: "bytes12",
+            },
           ],
           name: "registerGold",
           outputs: [
             {
-              internalType: "bytes32",
+              internalType: "bytes12",
               name: "",
-              type: "bytes32",
+              type: "bytes12",
             },
           ],
           stateMutability: "nonpayable",
