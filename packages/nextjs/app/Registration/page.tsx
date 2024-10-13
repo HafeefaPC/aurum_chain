@@ -13,10 +13,6 @@ const GoldRegistration = () => {
     weight: "",
     purity: "",
     description: "",
-    certificationDetails: "",
-    certificationDate: "",
-    mineLocation: "",
-    parentGoldId: "",
   });
 
   const { writeContractAsync: writeGoldLedgerAsync } = useScaffoldWriteContract("GoldLedger");
@@ -34,15 +30,7 @@ const GoldRegistration = () => {
     try {
       const result = await writeGoldLedgerAsync({
         functionName: "registerGold",
-        args: [
-          formData.weight,
-          formData.purity,
-          formData.description,
-          formData.certificationDetails,
-          formData.certificationDate,
-          formData.mineLocation,
-          formData.parentGoldId,
-        ],
+        args: [formData.weight, formData.purity, formData.description],
       });
       console.log("Gold registered successfully");
       console.log("Unique Identifier:", result);
@@ -85,55 +73,6 @@ const GoldRegistration = () => {
                   value={formData.purity}
                   onChange={handleChange}
                   placeholder="e.g., 24K, 22K, 18K"
-                  className="text-white w-full"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="certificationDetails" className="text-white">
-                  Certification Details
-                </Label>
-                <Input
-                  id="certificationDetails"
-                  name="certificationDetails"
-                  value={formData.certificationDetails}
-                  onChange={handleChange}
-                  className="text-white w-full"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="certificationDate" className="text-white">
-                  Certification Date
-                </Label>
-                <Input
-                  id="certificationDate"
-                  name="certificationDate"
-                  type="date"
-                  value={formData.certificationDate}
-                  onChange={handleChange}
-                  className="text-white w-full"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="mineLocation" className="text-white">
-                  Mine Location
-                </Label>
-                <Input
-                  id="mineLocation"
-                  name="mineLocation"
-                  value={formData.mineLocation}
-                  onChange={handleChange}
-                  className="text-white w-full"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="parentGoldId" className="text-white">
-                  Parent Gold ID (Optional)
-                </Label>
-                <Input
-                  id="parentGoldId"
-                  name="parentGoldId"
-                  value={formData.parentGoldId}
-                  onChange={handleChange}
                   className="text-white w-full"
                 />
               </div>
