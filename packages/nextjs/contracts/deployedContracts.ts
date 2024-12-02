@@ -6,8 +6,8 @@ import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
   31337: {
-    GoldLedger: {
-      address: "0x959922bE3CAee4b8Cd9a407cc3ac1C251C2007B1",
+    DiamondLedger: {
+      address: "0xe7f1725E7734CE288F8367e1Bb143E90bb3F0512",
       abi: [
         {
           anonymous: false,
@@ -80,7 +80,7 @@ const deployedContracts = {
                   type: "bool",
                 },
               ],
-              internalType: "struct GoldLedger.GoldDetails[]",
+              internalType: "struct DiamondLedger.GoldDetails[]",
               name: "",
               type: "tuple[]",
             },
@@ -146,7 +146,7 @@ const deployedContracts = {
                   type: "bool",
                 },
               ],
-              internalType: "struct GoldLedger.GoldDetails",
+              internalType: "struct DiamondLedger.GoldDetails",
               name: "",
               type: "tuple",
             },
@@ -221,6 +221,219 @@ const deployedContracts = {
     },
   },
   84532: {
+    DiamondLedger: {
+      address: "0x081d797Cef5C376A06AAFBEF554d287b8f91d9A6",
+      abi: [
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "bytes12",
+              name: "uniqueIdentifier",
+              type: "bytes12",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "registrar",
+              type: "address",
+            },
+          ],
+          name: "GoldRegistered",
+          type: "event",
+        },
+        {
+          inputs: [],
+          name: "getAllGoldDetails",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "bytes12",
+                  name: "uniqueIdentifier",
+                  type: "bytes12",
+                },
+                {
+                  internalType: "string",
+                  name: "weight",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "purity",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "description",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "certificationDetails",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "certificationDate",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "mineLocation",
+                  type: "string",
+                },
+                {
+                  internalType: "bytes12",
+                  name: "parentGoldId",
+                  type: "bytes12",
+                },
+                {
+                  internalType: "bool",
+                  name: "hasParentGoldId",
+                  type: "bool",
+                },
+              ],
+              internalType: "struct DiamondLedger.GoldDetails[]",
+              name: "",
+              type: "tuple[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "bytes12",
+              name: "_uniqueIdentifier",
+              type: "bytes12",
+            },
+          ],
+          name: "getGoldDetails",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "bytes12",
+                  name: "uniqueIdentifier",
+                  type: "bytes12",
+                },
+                {
+                  internalType: "string",
+                  name: "weight",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "purity",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "description",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "certificationDetails",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "certificationDate",
+                  type: "string",
+                },
+                {
+                  internalType: "string",
+                  name: "mineLocation",
+                  type: "string",
+                },
+                {
+                  internalType: "bytes12",
+                  name: "parentGoldId",
+                  type: "bytes12",
+                },
+                {
+                  internalType: "bool",
+                  name: "hasParentGoldId",
+                  type: "bool",
+                },
+              ],
+              internalType: "struct DiamondLedger.GoldDetails",
+              name: "",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "string",
+              name: "_weight",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_purity",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_description",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_certificationDetails",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_certificationDate",
+              type: "string",
+            },
+            {
+              internalType: "string",
+              name: "_mineLocation",
+              type: "string",
+            },
+            {
+              internalType: "bytes12",
+              name: "_parentGoldId",
+              type: "bytes12",
+            },
+          ],
+          name: "registerGold",
+          outputs: [
+            {
+              internalType: "bytes12",
+              name: "",
+              type: "bytes12",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "totalRegistrations",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+      ],
+      inheritedFunctions: {},
+    },
     GoldLedger: {
       address: "0xc2591EcC12DB13eef1191459A00e14f6f9850345",
       abi: [
@@ -240,7 +453,7 @@ const deployedContracts = {
               type: "address",
             },
           ],
-          name: "GoldRegistered",
+          name: "DiamondRegistered",
           type: "event",
         },
         {
@@ -251,7 +464,7 @@ const deployedContracts = {
               type: "uint256",
             },
           ],
-          name: "getGoldDetails",
+          name: "getDiamondDetails",
           outputs: [
             {
               components: [
@@ -287,7 +500,7 @@ const deployedContracts = {
                 },
                 {
                   internalType: "string",
-                  name: "parentGoldId",
+                  name: "parentDiamondId",
                   type: "string",
                 },
                 {
@@ -296,7 +509,7 @@ const deployedContracts = {
                   type: "uint256",
                 },
               ],
-              internalType: "struct GoldLedger.GoldDetails",
+              internalType: "struct DiamondLedger.DiamondDetails",
               name: "",
               type: "tuple",
             },
@@ -312,7 +525,7 @@ const deployedContracts = {
               type: "uint256",
             },
           ],
-          name: "goldRegistry",
+          name: "DiamondRegistry",
           outputs: [
             {
               internalType: "string",
@@ -346,7 +559,7 @@ const deployedContracts = {
             },
             {
               internalType: "string",
-              name: "parentGoldId",
+              name: "parentDiamondId",
               type: "string",
             },
             {
@@ -392,11 +605,11 @@ const deployedContracts = {
             },
             {
               internalType: "string",
-              name: "_parentGoldId",
+              name: "_parentDiamondId",
               type: "string",
             },
           ],
-          name: "registerGold",
+          name: "registerDiamond",
           outputs: [
             {
               internalType: "uint256",

@@ -51,12 +51,21 @@ const config: HardhatUserConfig = {
         enabled: process.env.MAINNET_FORKING_ENABLED === "true",
       },
     },
+    
     mainnet: {
       url: `https://eth-mainnet.alchemyapi.io/v2/${providerApiKey}`,
       accounts: [deployerPrivateKey],
     },
-    sepolia: {
-      url: `https://eth-sepolia.g.alchemy.com/v2/${providerApiKey}`,
+    base : {
+      url: "https://mainnet.base.org",
+      accounts: [deployerPrivateKey]
+    },
+    baseGoerli : {
+      url: "https://goerli.base.org",
+      accounts: [deployerPrivateKey]
+    },
+    baseSepolia: { // Added baseSepolia network configuration
+      url: "https://sepolia.base.org", // Replace with the correct URL for baseSepolia
       accounts: [deployerPrivateKey],
     },
     arbitrum: {
@@ -99,14 +108,7 @@ const config: HardhatUserConfig = {
       url: "https://rpc.chiadochain.net",
       accounts: [deployerPrivateKey],
     },
-    base: {
-      url: "https://mainnet.base.org",
-      accounts: [deployerPrivateKey],
-    },
-    baseSepolia: {
-      url: "https://sepolia.base.org",
-      accounts: [deployerPrivateKey],
-    },
+   
     scrollSepolia: {
       url: "https://sepolia-rpc.scroll.io",
       accounts: [deployerPrivateKey],

@@ -7,7 +7,7 @@ import { Input } from "../../~/components/ui/input";
 import { Label } from "../../~/components/ui/label";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 
-interface GoldDetails {
+interface DiamondDetails {
   uniqueIdentifier: string;
   weight: string;
   purity: string;
@@ -15,23 +15,23 @@ interface GoldDetails {
   certificationDetails: string;
   certificationDate: string;
   mineLocation: string;
-  parentGoldId: string;
-  hasParentGoldId: boolean;
+  parentDiamondId: string;
+  hasParentDiamondId: boolean;
 }
 
-const GoldSearch = () => {
+const DiamondSearch = () => {
   const [searchId, setSearchId] = useState<string>("");
   const [searchPerformed, setSearchPerformed] = useState(false);
-  const [matchedGoldDetails, setMatchedGoldDetails] = useState<GoldDetails | null>(null);
+  const [matchedDiamondDetails, setMatchedDiamondDetails] = useState<DiamondDetails | null>(null);
 
   const {
-    data: allGoldDetails,
+    data: allDiamondDetails,
     isLoading,
     error,
     refetch,
   } = useScaffoldReadContract({
-    contractName: "GoldLedger",
-    functionName: "getAllGoldDetails",
+    contractName: "DiamondLedger",
+    functionName: "getAllDiamondDetails",
   });
 
   useEffect(() => {
@@ -41,14 +41,14 @@ const GoldSearch = () => {
   }, [searchPerformed, searchId, refetch]);
 
   useEffect(() => {
-    if (allGoldDetails && searchId) {
-      console.log("Result from smart contract:", allGoldDetails);
-      const matchedDetails = (allGoldDetails as unknown as GoldDetails[]).find(
+    if (allDiamondDetails && searchId) {
+      console.log("Result from smart contract:", allDiamondDetails);
+      const matchedDetails = (allDiamondDetails as unknown as DiamondDetails[]).find(
         details => details.uniqueIdentifier === searchId,
       );
-      setMatchedGoldDetails(matchedDetails || null);
+      setMatchedDiamondDetails(matchedDetails || null);
     }
-  }, [allGoldDetails, searchId]);
+  }, [allDiamondDetails, searchId]);
 
   const handleSearch = () => {
     if (searchId) {
@@ -56,10 +56,10 @@ const GoldSearch = () => {
     }
   };
 
-  const renderGoldDetails = (details: GoldDetails) => (
+  const renderDiamondDetails = (details: DiamondDetails) => (
     <Card className="p-4">
       <CardHeader>
-        <CardTitle className="text-lg font-semibold">Gold Details</CardTitle>
+        <CardTitle className="text-lg font-semibold">Diamond Details</CardTitle>
       </CardHeader>
       <CardContent>
         <div className="grid grid-cols-2 gap-4">
@@ -88,8 +88,8 @@ const GoldSearch = () => {
             <p>{details.mineLocation}</p>
           </div>
           <div>
-            <Label className="font-bold">Parent Gold ID:</Label>
-            <p>{details.parentGoldId}</p>
+            <Label className="font-bold">Parent Diamond ID:</Label>
+            <p>{details.parentDiamondId}</p>
           </div>
           <div>
             <Label className="font-bold">Unique Identifier:</Label>
@@ -104,9 +104,9 @@ const GoldSearch = () => {
     <div className="min-h-screen flex items-center justify-center p-4 sm:p-6 md:p-8 text-white">
       <Card className="w-full max-w-2xl p-4">
         <CardHeader>
-          <CardTitle className="text-2xl sm:text-3xl font-bold text-center text-white">Gold Search</CardTitle>
+          <CardTitle className="text-2xl sm:text-3xl font-bold text-center text-white">Diamond Search</CardTitle>
           <CardDescription className="text-center text-white">
-            Enter a unique identifier to search for gold details
+            Enter a unique identifier to search for Diamond details
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -117,20 +117,20 @@ const GoldSearch = () => {
               onChange={e => setSearchId(e.target.value)}
               className="text-white w-full"
             />
-            <Button onClick={handleSearch} className="text-black">
+            <Button onClick={handleSearch} className="text-black bg-slate-400">
               Search
             </Button>
           </div>
           {isLoading && <p className="mt-4">Loading...</p>}
           {error && <p className="mt-4 text-red-500">Error: {error.message}</p>}
-          {searchPerformed && !isLoading && !error && !matchedGoldDetails && (
-            <p className="mt-4">No gold details found for the given identifier.</p>
+          {searchPerformed && !isLoading && !error && !matchedDiamondDetails && (
+            <p className="mt-4">No Diamond details found for the given identifier.</p>
           )}
-          {matchedGoldDetails && <div className="mt-4">{renderGoldDetails(matchedGoldDetails)}</div>}
+          {matchedDiamondDetails && <div className="mt-4">{renderDiamondDetails(matchedDiamondDetails)}</div>}
         </CardContent>
       </Card>
     </div>
   );
 };
 
-export default GoldSearch;
+export default DiamondSearch;

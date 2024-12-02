@@ -1,0 +1,37 @@
+{
+  "language": "Solidity",
+  "sources": {
+    "contracts/YourContract.sol": {
+      "content": "// SPDX-License-Identifier: MIT\r\npragma solidity ^0.8.0;\r\n\r\ncontract  DiamondLedger {\r\n    struct GoldDetails {\r\n        bytes12 uniqueIdentifier; // changes from bytes32 to bytes12\r\n        string weight;\r\n        string purity;\r\n        string description;\r\n        string certificationDetails;\r\n        string certificationDate;\r\n        string mineLocation;\r\n        bytes12 parentGoldId; // Changed from bytes32 to bytes12\r\n        bool hasParentGoldId; // New field to indicate if parentGoldId is set\r\n    }\r\n\r\n    mapping(bytes12 => GoldDetails) private diamondRegistry; // Changed from bytes32 to bytes12\r\n    bytes12[] private goldIdentifiers; // Changed from bytes32 to bytes12\r\n    uint256 public totalRegistrations;\r\n\r\n    event GoldRegistered(bytes12 indexed uniqueIdentifier, address indexed registrar); // Changed from bytes32 to bytes12\r\n\r\n    function registerGold(\r\n        string calldata _weight,\r\n        string calldata _purity,\r\n        string calldata _description,\r\n        string calldata _certificationDetails,\r\n        string calldata _certificationDate,\r\n        string calldata _mineLocation,\r\n        bytes12 _parentGoldId // Changed from bytes32 to bytes12\r\n    ) public returns (bytes12) { // Changed from bytes32 to bytes12\r\n      require(bytes(_weight).length > 0, \"Weight cannot be empty\");\r\n     require(bytes(_purity).length > 0, \"Purity cannot be empty\");\r\n        bytes12 uniqueIdentifier = bytes12(keccak256(abi.encodePacked(block.timestamp, msg.sender, ++totalRegistrations))); // Changed from bytes32 to bytes12\r\n        \r\n        diamondRegistry[uniqueIdentifier] = GoldDetails({\r\n            uniqueIdentifier: uniqueIdentifier,\r\n            weight: _weight,\r\n            purity: _purity,\r\n            description: _description,\r\n            certificationDetails: _certificationDetails,\r\n            certificationDate: _certificationDate,\r\n            mineLocation: _mineLocation,\r\n            parentGoldId: _parentGoldId, // Changed from bytes32 to bytes12\r\n            hasParentGoldId: _parentGoldId != bytes12(0) // Check if parentGoldId is set\r\n        });\r\n        goldIdentifiers.push(uniqueIdentifier);\r\n\r\n        emit GoldRegistered(uniqueIdentifier, msg.sender);\r\n\r\n        return uniqueIdentifier;\r\n    }\r\n\r\n    function getGoldDetails(bytes12 _uniqueIdentifier) public view returns (GoldDetails memory) { // Changed from bytes32 to bytes12\r\n        return diamondRegistry[_uniqueIdentifier];\r\n    }\r\n\r\n    function getAllGoldDetails() external view returns (GoldDetails[] memory) {\r\n        GoldDetails[] memory allGoldDetails = new GoldDetails[](goldIdentifiers.length);\r\n        for (uint256 i = 0; i < goldIdentifiers.length; i++) {\r\n            allGoldDetails[i] = diamondRegistry[goldIdentifiers[i]];\r\n        }\r\n        return allGoldDetails;\r\n    }\r\n    \r\n}\r\n"
+    }
+  },
+  "settings": {
+    "viaIR": true,
+    "optimizer": {
+      "enabled": true,
+      "runs": 200
+    },
+    "evmVersion": "paris",
+    "outputSelection": {
+      "*": {
+        "*": [
+          "abi",
+          "evm.bytecode",
+          "evm.deployedBytecode",
+          "evm.methodIdentifiers",
+          "metadata",
+          "devdoc",
+          "userdoc",
+          "storageLayout",
+          "evm.gasEstimates"
+        ],
+        "": [
+          "ast"
+        ]
+      }
+    },
+    "metadata": {
+      "useLiteralContent": true
+    }
+  }
+}

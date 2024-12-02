@@ -12,7 +12,7 @@ import type { NextPage } from "next";
 
 const Home: NextPage = () => {
   const titleControls = useAnimation();
-  const [bgColor, setBgColor] = useState("bg-yellow-400");
+  const [bgColor, setBgColor] = useState("bg-slate-400");
   const [textColor, setTextColor] = useState("text-black");
 
   useEffect(() => {
@@ -20,13 +20,13 @@ const Home: NextPage = () => {
       for (let i = 0; i < 5; i++) {
         await new Promise(resolve => setTimeout(resolve, 100));
         setBgColor("bg-black");
-        setTextColor("text-yellow-400");
+        setTextColor("text-slate-400");
         await new Promise(resolve => setTimeout(resolve, 100));
-        setBgColor("bg-yellow-400");
+        setBgColor("bg-slate-400");
         setTextColor("text-black");
       }
       setBgColor("bg-black");
-      setTextColor("text-yellow-400");
+      setTextColor("text-slate-400");
     };
 
     const animateTitle = async () => {
@@ -52,16 +52,14 @@ const Home: NextPage = () => {
             transition={{ delay: 0.5, duration: 0.8 }}
             className="self-start flex flex-col items-start"
           >
-            <p className="text-sm text-yellow-400 italic m-0 p-0" style={{ fontFamily: "'GFS Didot', serif" }}>
-              Powered by
-            </p>
-            <Image src={base} alt="Powered by Base" width={200} height={50} className="rounded-lg w-28" />
+           
+
           </motion.div>
           <motion.h1
             animate={titleControls}
             className={`text-8xl font-bold pt-4 ${textColor}`}
             style={{
-              fontFamily: "'Goldman', sans-serif",
+              fontFamily: "'Diamondman', sans-serif",
             }}
           >
             CHRYSUS
@@ -75,12 +73,19 @@ const Home: NextPage = () => {
         >
           Because nothing says &apos;trust&apos; like onchain tracked bling ✨
         </motion.p>
-        <div className="mt-8 flex justify-center gap-20">
+        <div className="mt-8 flex flex-col justify-center gap-6">
           <Link href="/Registration">
-            <Button>Register The Gold</Button>
+            <Button  className="bg-slate-400">Register The Diamond</Button>
           </Link>
           <Link href="/Track">
-            <Button>Track Your Gold</Button>
+            <Button className="bg-slate-400">Track Your Diamond</Button>
+          </Link>
+
+          <Link href="/TaxCalculation">
+            <Button  className="bg-slate-400">Calculate Tax</Button>
+          </Link>
+          <Link href="/Ownership">
+            <Button  className="bg-slate-400">Ownership Change</Button>
           </Link>
         </div>
       </motion.header>

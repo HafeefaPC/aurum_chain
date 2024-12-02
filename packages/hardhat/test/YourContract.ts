@@ -1,38 +1,38 @@
 import { expect } from "chai";
 import { ethers } from "hardhat";
-import { GoldLedger, GoldLedger__factory } from "../typechain-types";
+import { DiamondLedger, DiamondLedger__factory } from "../typechain-types";
 import { BytesLike } from "ethers";
 
-describe("GoldLedger", function () {
-  let goldLedger: GoldLedger;
+describe("DiamondLedger", function () {
+  let DiamondLedger: DiamondLedger;
 
   before(async () => {
-    const goldLedgerFactory: GoldLedger__factory = (await ethers.getContractFactory(
-      "GoldLedger",
-    )) as GoldLedger__factory;
-    goldLedger = await goldLedgerFactory.deploy();
-    await goldLedger.waitForDeployment();
+    const DiamondLedgerFactory: DiamondLedger__factory = (await ethers.getContractFactory(
+      "DiamondLedger",
+    )) as DiamondLedger__factory;
+    DiamondLedger = await DiamondLedgerFactory.deploy();
+    await DiamondLedger.waitForDeployment();
   });
 
-  describe("Gold Registration", function () {
-    it("Should register gold with initial details", async function () {
+  describe("Diamond Registration", function () {
+    it("Should register Diamond with initial details", async function () {
       const weight: string = "10g";
       const purity: string = "99.9%";
-      const description: string = "Pure gold bar";
+      const description: string = "Pure Diamond bar";
       const certificationDetails: string = "Certified by XYZ";
       const certificationDate: string = "2023-01-01";
       const mineLocation: string = "Mine A";
-      const parentGoldId: BytesLike = ethers.zeroPadBytes(ethers.toBeHex("0x123456789012"), 12);
+      const parentDiamondId: BytesLike = ethers.zeroPadBytes(ethers.toBeHex("0x123456789012"), 12);
 
       // Initial registration
-      const tx = await goldLedger.registerGold(
+      const tx = await DiamondLedger.registerDiamond(
         weight,
         purity,
         description,
         certificationDetails,
         certificationDate,
         mineLocation,
-        parentGoldId,
+        parentDiamondId,
       );
 
       const receipt = await tx.wait();
@@ -58,18 +58,18 @@ describe("GoldLedger", function () {
 
       console.log("Extracted uniqueIdentifier:", uniqueIdentifier);
 
-      // Retrieve and verify gold details
-      const goldDetails = await goldLedger.getAllGoldDetails();
+      // Retrieve and verify Diamond details
+      const DiamondDetails = await DiamondLedger.getAllDiamondDetails();
 
-      expect(goldDetails.length).to.equal(1);
-      expect(goldDetails[0].weight).to.equal(weight);
-      expect(goldDetails[0].purity).to.equal(purity);
-      expect(goldDetails[0].description).to.equal(description);
+      expect(DiamondDetails.length).to.equal(1);
+      expect(DiamondDetails[0].weight).to.equal(weight);
+      expect(DiamondDetails[0].purity).to.equal(purity);
+      expect(DiamondDetails[0].description).to.equal(description);
     });
 
-    it("Should fail to retrieve non-existent gold details", async function () {
+    it("Should fail to retrieve non-existent Diamond details", async function () {
       const nonExistentId: BytesLike = ethers.zeroPadBytes(ethers.toBeHex("0x000000000000"), 12);
-      await expect(goldLedger.getGoldDetails(nonExistentId)).to.be.revertedWith("Gold not found");
+      await expect(DiamondLedger.getDiamondDetails(nonExistentId)).to.be.revertedWith("Diamond not found");
     });
   });
 });
